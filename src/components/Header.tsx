@@ -9,18 +9,20 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "./ui/sheet";
+import CartSheet from "./CartSheet";
+import { useCart } from "../context/CartContext";
 
 interface HeaderProps {
-  cartItemCount?: number;
   categories?: string[];
   onSearch?: (query: string) => void;
 }
 
 const Header = ({
-  cartItemCount = 0,
   categories = ["Clothing", "Electronics", "Home & Garden", "Beauty", "Sports"],
   onSearch = () => {},
 }: HeaderProps) => {
+  const { getCartCount } = useCart();
+  const cartItemCount = getCartCount();
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -96,14 +98,7 @@ const Header = ({
           <Button variant="ghost" size="icon">
             <User className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon" className="relative">
-            <ShoppingCart className="h-5 w-5" />
-            {cartItemCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                {cartItemCount}
-              </span>
-            )}
-          </Button>
+          <CartSheet />
         </div>
 
         {/* Mobile Header */}
@@ -118,14 +113,7 @@ const Header = ({
           </Button>
 
           {/* Mobile Cart */}
-          <Button variant="ghost" size="icon" className="relative">
-            <ShoppingCart className="h-5 w-5" />
-            {cartItemCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                {cartItemCount}
-              </span>
-            )}
-          </Button>
+          <CartSheet />
 
           {/* Mobile Menu */}
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
